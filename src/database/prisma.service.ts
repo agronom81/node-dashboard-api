@@ -1,16 +1,25 @@
 import { PrismaClient, UserModel } from '@prisma/client';
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
+import { TYPES } from '../types';
+import { ILogger } from '../logger/logger.interface';
 
 @injectable()
 export class PrismaService {
     client: PrismaClient;
 
-    constructor() {
+    constructor(@inject(TYPES.ILogger) private logger: ILogger) {
         this.client = new PrismaClient();
     }
 
     async connect(): Promise<void> {
-        await this.client.$connect();
+        try {
+            await this.client.$connect();
+            this.logger.log('[PrismaService] Connect successfully');
+        } catch (e) {
+            if (e instanceof Error) {
+                this.logger.log('[PrismaService] Connect error: ' + e.message);
+            }
+        }
     }
 
     async disconnect(): Promise<void> {
