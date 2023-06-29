@@ -35,6 +35,6 @@ export class UserService implements IUserService {
 
         const newUser = new User(existedUser.email, existedUser.name, existedUser.password);
 
-        return true;
+        return newUser.comparePassword(password);
     }
 }

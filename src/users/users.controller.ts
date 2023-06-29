@@ -41,7 +41,11 @@ export class UserController extends BaseController implements IUserController {
         next: NextFunction,
     ): Promise<void> {
         console.log(req.body);
-        this.ok(res, 'login');
+        const result = await this.userService.validateUser(req.body);
+        if (!result) {
+            return next(new HTTPError(401, 'User is not exist'));
+        }
+        this.ok(res, 'login ok');
     }
 
     async register(
