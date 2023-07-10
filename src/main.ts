@@ -35,7 +35,7 @@ async function bootstrap(): Promise<IBootstrapReturn> {
     const appContainer = new Container();
     appContainer.load(appBindings);
     const app = appContainer.get<App>(TYPES.Application);
-    app.init();
+    await app.init();
     return { appContainer, app };
 }
 
